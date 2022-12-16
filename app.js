@@ -4,11 +4,16 @@ const body_parser = require("body-parser");
 const path = require('path');
 
 const root_dir = require('./utils/path');
+const home_route = require('./routes/home');
 const app = express();
 
 app.use(body_parser.urlencoded({extended: false}));
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.use(home_route);
 app.use((req,res,next) => {
-    res.status(200).sendFile(path.join(root_dir, 'pages', 'home.html'));
+    res.status(404).sendFile(path.join(root_dir, 'pages', 'page_not_found.html'));
 })
 
 
