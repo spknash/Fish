@@ -8,6 +8,7 @@ const home_route = require('./routes/home');
 const join_route = require('./routes/join');
 const create_route = require('./routes/create');
 const app = express();
+const server = http.createServer(app);
 
 app.use(body_parser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -20,5 +21,16 @@ app.use((req,res,next) => {
 })
 
 
-const server = http.createServer(app);
+
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+      });
+});
+
+
 server.listen(3000);
